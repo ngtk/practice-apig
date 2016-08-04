@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ngtk/practice-apig/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -21,6 +23,13 @@ func Connect() *gorm.DB {
 	db.LogMode(false)
 	if gin.IsDebugging() {
 		db.LogMode(true)
+	}
+
+	if os.Getenv("AUTOMIGRATE") == "1" {
+		db.AutoMigrate(
+			&models.Email{},
+			&models.User{},
+		)
 	}
 	return db
 }
